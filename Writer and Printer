@@ -1,0 +1,115 @@
+package rev;
+
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
+class Principal {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner in = new Scanner(System.in);
+		int matricula, op;
+		String nome, nomeArq = "Alunos.txt";
+		double c1, c2, c3, media;
+
+		do {
+
+			System.out.println("1). Cadastrar aluno");
+			System.out.println("2). Calcular media");
+			System.out.println("0). Sair");
+			System.out.println("------------\nInforme sua opção:");
+			System.out.print("--> ");
+			op = in.nextInt();
+			in.nextLine();
+
+			switch (op) {
+
+			case 1:
+
+				System.out.print("Matrícula: ");
+				matricula = in.nextInt();
+				in.nextLine();
+				System.out.print("Nome: ");
+				nome = in.nextLine();
+				System.out.print("C1: ");
+				c1 = in.nextDouble();
+				in.nextLine();
+				System.out.print("C2: ");
+				c2 = in.nextDouble();
+				in.nextLine();
+				System.out.print("C3: ");
+				c3 = in.nextDouble();
+				in.nextLine();
+
+				FileWriter arq;
+
+				try {
+					arq = new FileWriter(nomeArq, true);
+					PrintWriter gravarArq = new PrintWriter(arq, true);
+
+					gravarArq.print(matricula + ";" + nome + ";" + c1 + ";" + c2 + ";" + c3);
+
+					System.out.println("Dados do arquivo " + nomeArq + " foram gravados com sucesso!");
+					arq.close();
+					gravarArq.close();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				break;
+
+			case 2:
+				String[] dados;
+
+				try {
+
+					FileReader arqLe = new FileReader(nomeArq);
+					BufferedReader lerArq = new BufferedReader(arqLe);
+
+					String aluno = lerArq.readLine();
+					dados = aluno.split(";");
+
+					media = (Double.parseDouble(dados[2]) + Double.parseDouble(dados[3]) + Double.parseDouble(dados[4]))
+							/ 3;
+
+					try {
+
+						arq = new FileWriter(nomeArq, true);
+						PrintWriter gravarArq = new PrintWriter(arq, true);
+
+						gravarArq.println(";" + media);
+
+						arq.close();
+						gravarArq.close();
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} catch (IOException e) {
+
+					System.err.println("Erro ao carregar o arquivo: " + e.getMessage());
+				}
+
+				break;
+
+			case 0:
+
+				break;
+
+			default:
+
+				System.out.println("Opção inválida!");
+				break;
+
+			}
+		} while (op != 0);
+		System.out.println("Fim do programa!");
+
+	}
+
+}
